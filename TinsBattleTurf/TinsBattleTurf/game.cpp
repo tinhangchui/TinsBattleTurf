@@ -42,6 +42,7 @@ Game::Game(int num_player, int MAP_WIDTH, int MAP_HEIGHT, int MAP_NUM_WALL)
 		boxArray[MAP_WIDTH - 1][i].state = Box::wall;
 		available_Box = available_Box - 2;
 	}
+	available_Box += 4;
 	//generate walls
 	assert(available_Box > MAP_NUM_WALL);	//no room for walls
 	srand(time(NULL));
@@ -53,6 +54,7 @@ Game::Game(int num_player, int MAP_WIDTH, int MAP_HEIGHT, int MAP_NUM_WALL)
 		{
 			boxArray[row][col].state = Box::wall;
 			MAP_NUM_WALL--;
+			available_Box--;
 		}
 	}
 	//generate player's score
@@ -100,7 +102,7 @@ bool Game::tryCapture(const int & playerIndex, const int & row, const int & col)
 	boxArray[row][col].state = Box::occupied;
 	playerList[playerIndex].addScore(num);
 	playerscore[playerIndex].pop();
-
+	available_Box--;
 	//define the adjacent boxes
 	Box* adjacentBox[] = {
 		&boxArray[row - 1][col],	//up
@@ -142,9 +144,8 @@ bool Game::tryCapture(const int & playerIndex, const int & row, const int & col)
 		}
 	}
 	//change the currentPlayerIndex to next Player
-	if (currentPlayer < playerList.size())
-		currentPlayer++;
-	else
+	currentPlayer++;
+	if (currentPlayer >= playerList.size())
 		currentPlayer = 0;
 
 	return true;

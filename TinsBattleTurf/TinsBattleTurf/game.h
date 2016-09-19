@@ -14,14 +14,14 @@ private:
 public:
 	Player() { score = 0; }
 	void addScore(int val) { score += val; }
-	int getScore() { return 0; }
+	int getScore() { return score; }
 };
 
 struct Box
 {
 	enum State { occupied, wall, empty } state;
 	int score;
-	int playerIndex;
+	int playerIndex = -1;
 };
 
 class Game
@@ -38,6 +38,7 @@ public:
 	Game(int num_player = 4, int MAP_WIDTH = 12, int MAP_HEIGHT = 12, int MAP_NUM_WALL = 20);
 	int getScore(const int& playerIndex);	//get that player's score
 	int getCurrentPlayer() { return currentPlayer; }	//get the currentPlayer
+	int getNumPlayer() { return playerList.size(); }	//get number of players
 	std::queue<int> const* getScoreQueue(int playerIndex) ;	//get the inmutatable scoreQueue of that player
 	std::vector<std::vector<Box>> const* getMap() {return &boxArray;}	//get the inmutatable map
 	bool tryCapture(const int& playerIndex, const int& row, const int& col);	//capture that box for that player

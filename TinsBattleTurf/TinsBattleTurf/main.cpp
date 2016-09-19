@@ -8,12 +8,12 @@ void runGame(sf::RenderWindow& window, GameGUI* gui);
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(600, 600), "BattleTurf");
-	GameGUI* gamePtr = runMenu(window);
-	if (gamePtr)
+	GameGUI* gamePtr = nullptr;
+	while((gamePtr = runMenu(window)) != nullptr)
 	{
 		runGame(window, gamePtr);
 		delete gamePtr;
-	}	
+	}
 	return 0;
 }
 
@@ -58,7 +58,7 @@ GameGUI* runMenu(sf::RenderWindow& window)
 
 void runGame(sf::RenderWindow& window, GameGUI * gui)
 {
-	while(window.isOpen())
+	while(window.isOpen() && gui->getState() != GameGUI::State::Exited)
 	{
 		sf::Event event;
 		//update event

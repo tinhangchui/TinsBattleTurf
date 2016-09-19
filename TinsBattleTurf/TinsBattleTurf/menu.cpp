@@ -56,16 +56,22 @@ void Menu::initialize()
 
 void Menu::mouseClick(sf::Vector2i & mousePosition)
 {
-	if (clientButton.isCursor_on_button(mousePosition))
-		state = State::Client;
-	else if (hostButton.isCursor_on_button(mousePosition))
-		state = State::Host;
-	else if (exitButton.isCursor_on_button(mousePosition))
-		state = State::Exited;
-	else if (backButton.isCursor_on_button(mousePosition))
-		state = State::Main;
-	else if (startButton.isCursor_on_button(mousePosition))
-		state = State::Ready;
+	if (state == State::Main)
+	{
+		if (clientButton.isCursor_on_button(mousePosition))
+			state = State::Client;
+		else if (hostButton.isCursor_on_button(mousePosition))
+			state = State::Host;
+		else if (exitButton.isCursor_on_button(mousePosition))
+			state = State::Exited;
+	}
+	else if (state == State::Host)
+	{
+		if (backButton.isCursor_on_button(mousePosition))
+			state = State::Main;
+		else if (startButton.isCursor_on_button(mousePosition))
+			state = State::Ready;
+	}
 }
 
 void Menu::mouseMove(sf::Vector2i & mousePosition)
