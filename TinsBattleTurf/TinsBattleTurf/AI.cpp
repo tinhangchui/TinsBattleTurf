@@ -21,7 +21,7 @@ int Greedy::test(std::vector<std::vector<Box>> map, int row, int col, int score)
 			//if it is the same owner, fortify
 			if (adjacentBox[i]->playerIndex == playerIndex)
 			{
-				gain += 3;
+				gain += 5;
 			}
 			//else, if the targetBox.score > adjacentBox[i], capture that box
 			else if (score > adjacentBox[i]->score)

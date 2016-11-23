@@ -47,7 +47,7 @@ public:
 class GameGUI_AI : public GameGUI
 {
 private:
-	Greedy greedAI;
+	MiniMaxAI greedAI;
 public:
 	GameGUI_AI(Game* game) : GameGUI::GameGUI(game), greedAI(1)
 	{
