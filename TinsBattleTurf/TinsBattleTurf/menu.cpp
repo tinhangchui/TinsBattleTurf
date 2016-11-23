@@ -116,6 +116,6 @@ void Menu::draw(sf::RenderTarget & target, sf::RenderStates states) const
 
 GameGUI * Menu::buildGame()
 {
-	return new GameGUI(new Game());
+	return new GameGUI_AI(new Game(2, 12, 12, 20));
 }
 

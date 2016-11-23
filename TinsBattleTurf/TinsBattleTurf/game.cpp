@@ -33,13 +33,13 @@ Game::Game(int num_player, int MAP_WIDTH, int MAP_HEIGHT, int MAP_NUM_WALL)
 	for (int i = 0; i < MAP_HEIGHT; i++)
 	{
 		boxArray[i][0].state = Box::wall;
-		boxArray[i][MAP_HEIGHT - 1].state = Box::wall;
+		boxArray[i][MAP_WIDTH - 1].state = Box::wall;
 		available_Box = available_Box - 2;
 	}
 	for (int i = 0; i < MAP_WIDTH; i++)
 	{
 		boxArray[0][i].state = Box::wall;
-		boxArray[MAP_WIDTH - 1][i].state = Box::wall;
+		boxArray[MAP_HEIGHT - 1][i].state = Box::wall;
 		available_Box = available_Box - 2;
 	}
 	available_Box += 4;
@@ -123,9 +123,9 @@ bool Game::tryCapture(const int & playerIndex, const int & row, const int & col)
 			if (adjacentBox[i]->playerIndex == playerIndex)
 			{
 				//fortify
-				adjacentBox[i]->score += 3;
+				adjacentBox[i]->score += 5;
 				//add score to the owner
-				playerList[playerIndex].addScore(3);
+				playerList[playerIndex].addScore(5);
 			}
 			//else, if the targetBox.score > adjacentBox[i], capture that box
 			else if (boxArray[row][col].score > adjacentBox[i]->score)

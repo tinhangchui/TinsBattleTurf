@@ -91,10 +91,27 @@ GameGUI::GameGUI(Game * game) : gamePtr(game), previousBox(nullptr)
 	userBox.setSize(sf::Vector2f(50, 50));
 	userBox.setTexture(_getTexture(UserBoxTexture[0]));
 	int firstNum = game->getScoreQueue(0)->front();
+
+	//REMOVE ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	std::cout << "Player 0 : Your next number is " << game->getScoreQueue(0)->_Get_container()[1] << std::endl;
 	
 	userBox_Text.setString(std::to_string(firstNum));
 	userBox_Text.setFont(font);
 	userBox_Text.setFillColor(sf::Color::Black);
+
+	//initialize gameMenu 
+	gameMenuRect.setSize(sf::Vector2f(200, 2000));
+	gameMenuRect.setFillColor(sf::Color(255, 255, 255, 100));
+	gameMenuRect.setPosition(0, 0);
+
+	gameMenu_playerScore.resize(num_player);
+	for (int i = 0; i < gameMenu_playerScore.size(); i++)
+	{
+		gameMenu_playerScore[i].setFont(font);
+		gameMenu_playerScore[i].setCharacterSize(20);
+		gameMenu_playerScore[i].setFillColor(sf::Color::Black);
+		gameMenu_playerScore[i].setPosition(25, 25 + 50 * i);
+	}
 }
 
 GameGUI::~GameGUI()
@@ -104,6 +121,10 @@ GameGUI::~GameGUI()
 
 void GameGUI::mouseMove(const sf::Vector2i & mousePosition)
 {
+	//if outside, return
+	if (mousePosition.x / 50 >= (*mapPtr).size() || mousePosition.y / 50 >= (*mapPtr)[0].size())
+		return;
+
 	//update the position of userBox
 	userBox.setPosition(mousePosition.x + 10, mousePosition.y + 10);
 	userBox_Text.setPosition(mousePosition.x + 15, mousePosition.y + 15);
@@ -113,6 +134,7 @@ void GameGUI::mouseMove(const sf::Vector2i & mousePosition)
 	{
 		previousBox->setTexture(_getTexture("Texture/box_empty_1_1.png"));
 	}
+	
 
 	if ((*mapPtr)[mousePosition.x / 50][mousePosition.y / 50].state == Box::empty)
 	{
@@ -125,6 +147,10 @@ void GameGUI::mouseMove(const sf::Vector2i & mousePosition)
 
 void GameGUI::mouseClick(const sf::Vector2i & mousePosition)
 {
+	//if outside, return
+	if (mousePosition.x / 50 >= (*mapPtr).size() || mousePosition.y / 50 >= (*mapPtr)[0].size())
+		return;
+
 	if (gamePtr->isEnded())
 		state = State::Exited;
 	if (gamePtr->tryCapture(playerIndex, mousePosition.x / 50, mousePosition.y / 50))
@@ -137,6 +163,8 @@ void GameGUI::mouseClick(const sf::Vector2i & mousePosition)
 				playerIndex = 0;
 			userBox.setTexture(_getTexture(UserBoxTexture[playerIndex]));
 			userBox_Text.setString(std::to_string(gamePtr->getScoreQueue(playerIndex)->front()));
+			//REMOVE ME!!!!!!!!!
+			std::cout << "Player" << playerIndex << " : Your next number is " << gamePtr->getScoreQueue(playerIndex)->_Get_container()[1] << std::endl;
 		}
 		else
 		{
@@ -156,7 +184,17 @@ void GameGUI::mouseClick(const sf::Vector2i & mousePosition)
 
 void GameGUI::keyPress()
 {
-
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+	{
+		if (state == State::GameMenu)
+			state = State::InGame;
+		else if (state == State::InGame)
+		{
+			state = State::GameMenu;
+			for (int i = 0; i < gameMenu_playerScore.size(); i++)
+				gameMenu_playerScore[i].setString("Player " + std::to_string(i) + " : " + std::to_string(gamePtr->getScore(i)));
+		}		
+	}
 }
 
 void GameGUI::draw(sf::RenderTarget & target, sf::RenderStates states) const
@@ -168,6 +206,12 @@ void GameGUI::draw(sf::RenderTarget & target, sf::RenderStates states) const
 			target.draw(mapSprite[i][j]);
 			target.draw(mapText[i][j]);
 		}
+	}
+	if (state == State::GameMenu)
+	{
+		target.draw(gameMenuRect);
+		for (const sf::Text& text : gameMenu_playerScore)
+			target.draw(text);
 	}
 	if (!gamePtr->isEnded())
 	{

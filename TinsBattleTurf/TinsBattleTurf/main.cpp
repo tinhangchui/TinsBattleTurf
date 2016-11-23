@@ -7,7 +7,7 @@ void runGame(sf::RenderWindow& window, GameGUI* gui);
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(600, 600), "BattleTurf");
+	sf::RenderWindow window(sf::VideoMode(600, 600), "BattleTurf", sf::Style::Close);
 	GameGUI* gamePtr = nullptr;
 	while((gamePtr = runMenu(window)) != nullptr)
 	{
@@ -73,6 +73,10 @@ void runGame(sf::RenderWindow& window, GameGUI * gui)
 			if (event.type == sf::Event::MouseMoved)
 			{
 				gui->mouseMove(sf::Mouse::getPosition(window));
+			}
+			if (event.type == sf::Event::KeyPressed)
+			{
+				gui->keyPress();
 			}
 		}
 
